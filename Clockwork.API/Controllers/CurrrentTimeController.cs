@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
 using Clockwork.API.Models;
+using System.Collections.Generic;
 
 namespace Clockwork.API.Controllers
 {
@@ -36,6 +37,36 @@ namespace Clockwork.API.Controllers
             }
 
             return Ok(returnVal);
+        }
+    }
+
+    [Route("api/[controller]")]
+    public class AllTimesController : Controller
+    {
+        // GET api/alltimes
+        [HttpGet]
+        public IActionResult Get()
+        {
+            List<CurrentTimeQuery> times = new List<CurrentTimeQuery>();
+
+            using (var db = new ClockworkContext())
+            {
+                foreach (var record in db.CurrentTimeQueries)
+                {
+                    times.Add(
+                        new CurrentTimeQuery
+                        {
+                            CurrentTimeQueryId = record.CurrentTimeQueryId,
+                            ClientIp = record.ClientIp,
+                            Time = record.Time,
+                            UTCTime = record.UTCTime
+                        });
+                }
+            }
+
+            times.Reverse();
+
+            return Ok(times);
         }
     }
 }

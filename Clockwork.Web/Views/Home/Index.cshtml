@@ -1,20 +1,35 @@
-﻿<script>
-function UserAction() {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            document.getElementById("output").innerHTML = this.responseText;
-        }
-    };
-    xhttp.open("GET", "http://127.0.0.1:5000/api/currenttime", true);
-    xhttp.setRequestHeader("Content-type", "application/json");
-    xhttp.send();
+﻿<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous">
+</script>
 
-}
+<script>
+    $(document).ready(function () {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("output").innerHTML = this.responseText;
+            }
+        };
+        xhttp.open("GET", "http://127.0.0.1:50725/api/alltimes", true);
+        xhttp.setRequestHeader("Content-type", "application/json");
+        xhttp.send();
+    });
+
+    function UserAction() {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("output").innerHTML = this.responseText;
+            }
+        };
+        xhttp.open("GET", "http://127.0.0.1:50725/api/currenttime", true);
+        xhttp.setRequestHeader("Content-type", "application/json");
+        xhttp.send();
+    }
 </script>
 
 <h2>AWH Clockwork Project @ViewData["Version"] on @ViewData["Runtime"]!</h2>
-
 
 <button type="submit" onclick="UserAction()">Get the time</button>
 
