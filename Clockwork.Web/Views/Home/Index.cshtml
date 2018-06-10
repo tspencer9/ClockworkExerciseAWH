@@ -4,6 +4,8 @@
 </script>
 
 <script>
+    // var results = [];
+
     $(document).ready(function () {
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function () {
@@ -18,19 +20,52 @@
 
     function UserAction() {
         var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
+        //xhttp.onreadystatechange = function() {
+        //    if (this.readyState == 4 && this.status == 200) {
+        //        document.getElementById("output").innerHTML = this.responseText;
+        //    }
+        //};
+        xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
-                document.getElementById("output").innerHTML = this.responseText;
-            }
+                var queries = JSON.parse(this.responseText);
+                $.each(queries, function (key, val) {
+                    $('#headerStart').append("<tr>" + 
+                        "<td>" + val.CurrentTimeQueryId + "</td >" +
+                        "<td>" + val.Time + "</td >" +
+                        "<td>" + val.ClientIp + "</td >" +
+                        "<td>" + val.UTCTime + "</td >" +
+                        "</tr >");
+                });
+            };
         };
+        //xhttp.onreadystatechange = function () {
+        //    if (this.readyState == 4 && this.status == 200) {
+        //        $('#output').prepend(this.responseText);
+        //    }
+        //};
         xhttp.open("GET", "http://127.0.0.1:50725/api/currenttime", true);
         xhttp.setRequestHeader("Content-type", "application/json");
         xhttp.send();
     }
 </script>
 
-<h2>AWH Clockwork Project @ViewData["Version"] on @ViewData["Runtime"]!</h2>
+<div class="container">
+    <div class="jumbotron">
+        <h2>AWH Clockwork Project @ViewData["Version"] on @ViewData["Runtime"]!</h2>
+        <hr size="2" color="red"/>
+        <br />
+        <button class ="btn btn-primary" type="submit" onclick="UserAction()">Get the time >></button>
+    </div>
+    <br />
+    <ul id="output"></ul>
 
-<button type="submit" onclick="UserAction()">Get the time</button>
-
-<p id="output"></p>
+    <table class="table" id="resultsTable">
+        <tr id="headerStart">
+            <th>Record ID</th>
+            <th>Server Time</th>
+            <th>Client IP</th>
+            <th>UTC Time</th>
+        </tr>
+        @*dynamically add all the records here as <tr></tr> with the <td> inside*@
+    </table>
+</div>

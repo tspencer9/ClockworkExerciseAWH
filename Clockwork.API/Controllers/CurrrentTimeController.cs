@@ -64,7 +64,7 @@ namespace Clockwork.API.Controllers
                 }
             }
 
-            times.Reverse();
+            // times.Reverse();
 
             return Ok(times);
         }
