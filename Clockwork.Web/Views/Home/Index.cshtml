@@ -4,14 +4,20 @@
 </script>
 
 <script>
-    // var results = [];
-
     $(document).ready(function () {
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
-                document.getElementById("output").innerHTML = this.responseText;
-            }
+                var response = JSON.parse(this.responseText);
+                var table = document.getElementById("resultsTable");
+                $.each(response, function (i, val) {
+                    var row = table.insertRow(1);
+                    row.insertCell(0).innerHTML = val.currentTimeQueryId;
+                    row.insertCell(1).innerHTML = val.time;
+                    row.insertCell(2).innerHTML = val.clientIp;
+                    row.insertCell(3).innerHTML = val.utcTime;
+                });
+            };
         };
         xhttp.open("GET", "http://127.0.0.1:50725/api/alltimes", true);
         xhttp.setRequestHeader("Content-type", "application/json");
@@ -20,29 +26,17 @@
 
     function UserAction() {
         var xhttp = new XMLHttpRequest();
-        //xhttp.onreadystatechange = function() {
-        //    if (this.readyState == 4 && this.status == 200) {
-        //        document.getElementById("output").innerHTML = this.responseText;
-        //    }
-        //};
         xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
-                var queries = JSON.parse(this.responseText);
-                $.each(queries, function (key, val) {
-                    $('#headerStart').append("<tr>" + 
-                        "<td>" + val.CurrentTimeQueryId + "</td >" +
-                        "<td>" + val.Time + "</td >" +
-                        "<td>" + val.ClientIp + "</td >" +
-                        "<td>" + val.UTCTime + "</td >" +
-                        "</tr >");
-                });
+                var result = JSON.parse(this.responseText);
+                var table = document.getElementById("resultsTable");
+                var row = table.insertRow(1);
+                row.insertCell(0).innerHTML = result.currentTimeQueryId;
+                row.insertCell(1).innerHTML = result.time;
+                row.insertCell(2).innerHTML = result.clientIp;
+                row.insertCell(3).innerHTML = result.utcTime;
             };
-        };
-        //xhttp.onreadystatechange = function () {
-        //    if (this.readyState == 4 && this.status == 200) {
-        //        $('#output').prepend(this.responseText);
-        //    }
-        //};
+        }
         xhttp.open("GET", "http://127.0.0.1:50725/api/currenttime", true);
         xhttp.setRequestHeader("Content-type", "application/json");
         xhttp.send();
@@ -57,10 +51,8 @@
         <button class ="btn btn-primary" type="submit" onclick="UserAction()">Get the time >></button>
     </div>
     <br />
-    <ul id="output"></ul>
-
     <table class="table" id="resultsTable">
-        <tr id="headerStart">
+        <tr>
             <th>Record ID</th>
             <th>Server Time</th>
             <th>Client IP</th>
